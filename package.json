@@ -1,0 +1,13 @@
+{
+  "name": "interval-handler",
+  "version": "0.0.1",
+  "description": "Simple utility to handle intervals",
+  "main": "main.js",
+  "license": "MIT",
+  "scripts": {
+    "test": "ava"
+  },
+  "devDependencies": {
+    "ava": "^3.0.0"
+  }
+}
