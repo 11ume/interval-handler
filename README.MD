@@ -4,7 +4,7 @@
 <br>
 <br>
 
-**Interval Handler** — Is a really simple interval controller utility
+**Interval Handler** — Is a really simple interval controller utility ⏱️
 
 <br>
 <br>
