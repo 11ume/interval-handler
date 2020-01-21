@@ -3,11 +3,16 @@ const handlerInterval = (fn, time) => {
     return () => clearInterval(interval)
 }
 
-const start = (intervalsRepo, stopables) => (id) => {
+const start = (intervalsRepo, stopables) => (id, now = false) => {
     const handler = intervalsRepo.get(id)
     if (handler) {
         const fn = handlerInterval(handler.fn, handler.every)
-        stopables.set(id, { fn: () => fn(), stopped: false })
+        stopables.set(id, {
+            fn
+            , stopped: false
+        })
+
+        if (now) handler.fn()
     }
 }
 
@@ -22,8 +27,8 @@ const stop = (stopables) => (id) => {
 
 const add = (intervalsRepo) => ({ id, every, fn }) => {
     intervalsRepo.set(id, {
-        every
-        , fn
+        fn
+        , every
     })
 }
 

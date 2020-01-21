@@ -5,7 +5,7 @@ type AddArgs = {
 }
 
 export type IntervalHandler = {
-    start: (id: string) => void
+    start: (id: string, now?: boolean) => void
     , stop: (id: string) => void
     , add: (args: AddArgs) => void
     , remove: (id: symbol) => void
