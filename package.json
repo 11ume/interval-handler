@@ -5,7 +5,7 @@
   "main": "main.js",
   "license": "MIT",
   "scripts": {
-    "test": "ava -v"
+    "test": "ava"
   },
   "devDependencies": {
     "ava": "^3.0.0"
