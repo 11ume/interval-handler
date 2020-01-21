@@ -1,76 +1,39 @@
 const test = require('ava')
 const intervalHandler = require('../main')
 
-test('test interval start', async (t) => {
-    const id = Symbol()
-    const ia = intervalHandler()
+test.serial('test interval start', async (t) => {
+    let ih = null
+    let count = 0
 
     const run = (call) => new Promise((resolve) => {
-        ia.add({
-            id
-            , every: 1000
-            , fn: call
-        })
-
-        ia.start(id)
+        ih = intervalHandler(1000, call)
+        ih.start()
         setTimeout(resolve, 3000)
     })
 
-    let count = 0
-    await run(() => {
-        count++
-    })
-
-    ia.stop(id)
+    await run(() => count++)
+    ih.stop()
     t.is(count, 2)
 })
 
-test('test interval start now', async (t) => {
-    const id = Symbol()
-    const ia = intervalHandler()
+test.serial('test interval start now', async (t) => {
+    let ih = null
+    let count = 0
 
     const run = (call) => new Promise((resolve) => {
-        ia.add({
-            id
-            , every: 1000
-            , fn: call
-        })
-
-        ia.start(id, true)
+        ih = intervalHandler(1000, call)
+        ih.start(true)
         setTimeout(resolve, 3000)
     })
 
-    let count = 0
-    await run(() => {
-        count++
-    })
-
-    ia.stop(id)
+    await run(() => count++)
+    ih.stop()
     t.is(count, 3)
 })
 
-test('test interval stop', async (t) => {
-    const id = Symbol()
-    const ia = intervalHandler()
-
-    const run = (call) => new Promise((resolve) => {
-        ia.add({
-            id
-            , every: 1000
-            , fn: call
-        })
-
-        ia.start(id)
-        setTimeout(resolve, 3000)
-    })
-
-    let count = 0
-    await run(() => {
-        count++
-        ia.stop(id)
-    })
-
-
-    t.is(count, 1)
-    t.true(ia.isStopped(id))
+test.serial('test interval stop', (t) => {
+    const ih = intervalHandler(0, Function)
+    ih.start(true)
+    ih.stop()
+    t.true(ih.isStopped())
 })

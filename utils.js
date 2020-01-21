@@ -10,12 +10,19 @@ const isFunction = (pram, name) => {
     }
 }
 
+const isNumber = (pram, name) => {
+    if (!(typeof pram === 'number')) {
+        throw createError('Param is not a number', `Param ${name} must be number`)
+    }
+}
+
 const isRequired = (name) => {
     throw createError('Param is required', `Param ${name} is required`)
 }
 
 module.exports = {
     isFunction
+    , isNumber
     , isRequired
     , createError
 }

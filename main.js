@@ -1,64 +1,38 @@
+const { isRequired, isFunction, isNumber } = require('./utils')
+
 const handlerInterval = (fn, time) => {
     const interval = setInterval(fn, time)
     return () => clearInterval(interval)
 }
 
-const start = (intervalsRepo, stopables) => (id, now = false) => {
-    const handler = intervalsRepo.get(id)
-    if (handler) {
-        const fn = handlerInterval(handler.fn, handler.every)
-        stopables.set(id, {
-            fn
-            , stopped: false
-        })
-
-        if (now) handler.fn()
-    }
+const start = (controller, every, fn) => (now = false) => {
+    controller.handler = handlerInterval(fn, every)
+    controller.running = true
+    if (now) fn()
 }
 
-const stop = (stopables) => (id) => {
-    const handler = stopables.get(id)
-    if (handler) {
-        const stopRunning = stopables.get(id)
-        stopRunning.stopped = true
-        stopRunning.fn()
-    }
+const stop = (controller) => () => {
+    controller.handler()
+    controller.running = false
 }
 
-const add = (intervalsRepo) => ({ id, every, fn }) => {
-    intervalsRepo.set(id, {
-        fn
-        , every
-    })
+const isStopped = (controller) => () => {
+    return !controller.running
 }
 
-const remove = (intervalsRepo, stopables) => (id) => {
-    intervalsRepo.delete(id)
-    const stopRunning = stopables.get(id)
-    if (stopRunning) {
-        stopRunning()
-        stopables.delete(id)
-        return
+const createIntervalHandler = (every = isRequired('every'), fn = isRequired('fn')) => {
+    const controller = {
+        handler: null
+        , running: false
     }
 
-    stopables.delete(id)
-}
-
-const isStopped = (stopables) => (id) => {
-    const stopb = stopables.get(id)
-    return stopb.stopped
-}
-
-const createIntervalHandler = () => {
-    const intervals = new Map()
-    const stopables = new Map()
+    isNumber(every, 'every')
+    isFunction(fn, 'fn')
 
     return {
-        start: start(intervals, stopables)
-        , stop: stop(stopables)
-        , add: add(intervals)
-        , remove: remove(intervals, stopables)
-        , isStopped: isStopped(stopables)
+        start: start(controller, every, fn)
+        , stop: stop(controller)
+        , isStopped: isStopped(controller)
     }
 }
 
