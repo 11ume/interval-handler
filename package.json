@@ -1,7 +1,7 @@
 {
   "name": "interval-handler",
   "version": "0.0.1",
-  "description": "Simple utility to handle intervals",
+  "description": "Really simple interval controller utility",
   "main": "main.js",
   "license": "MIT",
   "scripts": {

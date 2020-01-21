@@ -5,10 +5,10 @@ const handlerInterval = (fn, time) => {
     return () => clearInterval(interval)
 }
 
-const start = (controller, every, fn) => (now = false) => {
+const start = (controller, every, fn) => (already = false) => {
     controller.handler = handlerInterval(fn, every)
     controller.running = true
-    if (now) fn()
+    if (already) fn()
 }
 
 const stop = (controller) => () => {
