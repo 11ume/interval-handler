@@ -1,4 +1,4 @@
-const { isRequired, isFunction, isNumber } = require('./utils')
+const { isRequired, isFunction, isNumber, createError } = require('./utils')
 
 const handlerInterval = (fn, time) => {
     const interval = setInterval(fn, time)
@@ -12,6 +12,10 @@ const start = (controller, every, fn) => (already = false) => {
 }
 
 const stop = (controller) => () => {
+    if (!controller.handler) {
+        throw createError('intovke stop before start interval', 'the stop function was called before calling the start function')
+    }
+
     controller.handler()
     controller.running = false
 }
